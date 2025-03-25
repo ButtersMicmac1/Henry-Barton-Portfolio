@@ -147,11 +147,12 @@ export default function Home() {
               <span className="ml-2 text-white">🏗️</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-              <ProjectCard
-                title="ClearSave – Fintech Savings App"
-                description="Mobile-first app for goal-based saving with secure bank linking and real-time progress tracking."
-                tags={["iOS", "Fintech", "UX/UI", "Design Strategy"]}
-              />
+             <ProjectCard
+  title="ClearSave – Fintech Savings App"
+  description="Mobile-first app for goal-based saving with secure bank linking and real-time progress tracking."
+  tags={["iOS", "Fintech", "UX/UI", "Design Strategy"]}
+  href="/projects/clearsave"
+/>
               <ProjectCard
                 title="Lunara – AI Mental Wellness App"
                 description="Mindfulness app powered by AI personalization, featuring mood tracking and guided exercises."
