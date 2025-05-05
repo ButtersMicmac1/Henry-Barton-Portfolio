@@ -9,10 +9,10 @@ const timelineData = [
     id: 1,
     company: "GitFitCode",
     role: "UX/UI Designer",
-    period: "2022 - Present",
+    period: "2023 - Present",
     location: "Los Angeles, CA",
     type: "Part Time",
-    logo: "/company-b-logo.svg",
+    logo: "/images/gitfitcode-logo.png",
     skills: ["Cross-Functional Collaboration", "End-to-End UX/UI", "Strategic Design"],
   },
   {
@@ -30,27 +30,28 @@ const timelineData = [
 const skillsData = {
   "Design Tools": [
     { name: "Figma", proficiency: 95 },
-    { name: "Adobe XD", proficiency: 75 },
-    { name: "Miro", proficiency: 90 },
-    { name: "Sketch", proficiency: 75 },
-    { name: "WebFlow", proficiency: 75 },
+    { name: "Miro", proficiency: 85 },
+    { name: "Webflow", proficiency: 60 },
+    { name: "Adobe Suite (Ps, Ai)", proficiency: 70 },
   ],
-  "Development Understanding": [
-    { name: "HTML/CSS", proficiency: 85 },
-    { name: "React", proficiency: 50 },
-    { name: "Collaboration", proficiency: 95, isHeading: true },
-    { name: "Cross-functional teams", proficiency: 95 },
-    { name: "Agile Methodologies", proficiency: 85 },
-  ],
-  "UX Research": [
+  "UX Skills": [
     { name: "User Testing", proficiency: 90 },
     { name: "Persona Creation", proficiency: 95 },
     { name: "Journey Mapping", proficiency: 85 },
+    { name: "Wireframing & Prototyping", proficiency: 90 },
+    { name: "Accessibility Awareness", proficiency: 80 },
+    { name: "Mobile-first Design", proficiency: 90 },
+    { name: "AI-integrated UX", proficiency: 85 },
+    { name: "Visual Design (Typography & Color)", proficiency: 90 },
   ],
-  "Visual Design": [
-    { name: "Typography", proficiency: 90 },
-    { name: "Color Theory", proficiency: 85 },
-    { name: "Branding", proficiency: 80 },
+  "Technical Understanding": [
+    { name: "HTML/CSS", proficiency: 80 },
+    { name: "React", proficiency: 40 },
+  ],
+  Collaboration: [
+    { name: "Cross-functional Teams", proficiency: 95 },
+    { name: "Agile Methodologies", proficiency: 80 },
+    { name: "Stakeholder Communication", proficiency: 90 },
   ],
 }
 
@@ -68,7 +69,7 @@ export default function AboutMe() {
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
               Design, Purpose, and the Unexpected Path
             </span>
-            <span className="ml-2">☕💻</span>
+            <span className="ml-2">💡</span>
           </h2>
           {/* Profile Section */}
           <div className="flex flex-col md:flex-row-reverse items-center gap-8 mb-16">
@@ -94,21 +95,21 @@ export default function AboutMe() {
                   <p className="text-xl mb-4">
                     🚀 <strong>Hey, I'm Henry Barton</strong>
                   </p>
-                  <p className="mb-4">If you'd asked me a few years ago, I never would've imagined myself in design.</p>
+                  <p className="mb-4">A few years ago, I never imagined I'd end up in design.</p>
                   <p className="mb-4">
-                    I started out studying business, thinking that was my path. But it didn't take long to realize that
-                    it wasn't the right fit for me. My name's Henry, and my real passion for design came unexpectedly,
-                    through my brother, who's the VP of Design at a crypto company. Watching how he approached design, I
-                    found a way of thinking that clicked with me.
+                    I started out studying business, thinking that was the path. But it didn't take long to realize it
+                    wasn't the right fit. My passion for design came unexpectedly—through my brother, a VP of Design at
+                    a crypto company. Watching how he approached problems opened my eyes to a new way of thinking that
+                    immediately clicked.
                   </p>
                   <p className="mb-4">
-                    Through him, I've developed my own perspective on design—one that's driven by purpose and strategy,
-                    not just aesthetics. I began to see that design isn't just about creating pretty things; it's about
-                    solving problems and thinking through each decision carefully.
+                    Since then, I've built my own perspective—design driven by purpose and strategy, not just
+                    aesthetics. I've come to see that great design isn't just about how things look, but how they work.
+                    It's not just about screens—it's about guiding people through journeys.
                   </p>
                   <p>
-                    I've carried this approach with me ever since, always grounded in a methodical mindset. And now, I'm
-                    completely hooked on design. It's a journey I'm excited to continue, and one I never saw coming.
+                    That mindset shapes everything I do. Now, I'm fully immersed in design, constantly learning, and
+                    genuinely excited about where this journey is headed.
                   </p>
                 </div>
               </div>
@@ -208,7 +209,7 @@ export default function AboutMe() {
               </span>
               <span className="ml-2 text-white">🎨</span>
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
               {Object.entries(skillsData).map(([category, skills]) => (
                 <div key={category} className="p-6 bg-gray-900/50 rounded-xl backdrop-blur-sm border border-gray-800">
                   <h4 className="text-xl font-bold mb-4 text-purple-400 text-center md:text-left">{category}</h4>
@@ -256,4 +257,3 @@ function SkillBar({ name, proficiency, isHeading }) {
     </div>
   )
 }
-

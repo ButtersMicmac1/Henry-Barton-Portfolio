@@ -2,11 +2,10 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
+import { useState, useEffect, useRef } from "react"
+import { motion, useInView } from "framer-motion"
 import { Linkedin, Calendar, FileText, Smartphone, Palette, Lightbulb, Users, Instagram } from "lucide-react"
 import { Link as ScrollLink } from "react-scroll"
-import CustomCursor from "@/components/custom-cursor"
 import Navbar from "@/components/navbar"
 import SocialIcon from "@/components/social-icon"
 import { Button } from "@/components/ui/button"
@@ -14,6 +13,9 @@ import AboutMe from "@/components/about-me"
 import Loading from "@/components/loading"
 import InteractiveShapes from "@/components/InteractiveShapes"
 import AnimatedBoxes from "@/components/AnimatedBoxes"
+import ProjectCard from "@/components/project-card"
+import { scrollToHash } from "@/lib/scroll-to-hash"
+import ContactForm from "@/components/contact-form"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -28,18 +30,77 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [])
 
+  // Handle hash navigation when the component mounts
+  useEffect(() => {
+    if (!loading) {
+      scrollToHash()
+    }
+  }, [loading])
+
   if (!mounted) return null
   if (loading) return <Loading />
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // You can add a console.log here if you want to verify it's working
-    console.log("Form submission prevented")
+
+    const formData = new FormData(e.currentTarget)
+    const name = (formData.get("name") as string) || "Visitor"
+    const email = (formData.get("email") as string) || ""
+    const message = (formData.get("message") as string) || ""
+
+    // Encode the message properly for mailto
+    const encodedSubject = encodeURIComponent(`Portfolio Contact from ${name}`)
+    const encodedBody = encodeURIComponent(`${message}\n\nFrom: ${name}\nEmail: ${email}`)
+
+    // Create mailto link with form data
+    const mailtoLink = `mailto:bartonhenry15@gmail.com?subject=${encodedSubject}&body=${encodedBody}`
+
+    // Try to open the email client
+    try {
+      window.location.href = mailtoLink
+
+      // Clear the form after submission
+      e.currentTarget.reset()
+
+      // Show a success message
+      alert(
+        "Opening your email client. If nothing happens, please copy the message and email it directly to bartonhenry15@gmail.com",
+      )
+    } catch (error) {
+      // Fallback if the mailto link is blocked
+      alert(
+        "Unable to open your email client automatically. Please send an email directly to bartonhenry15@gmail.com with your message.",
+      )
+    }
+  }
+
+  // Animation variants for hero section
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10,
+      },
+    },
   }
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      <CustomCursor />
       <Navbar />
       <InteractiveShapes />
 
@@ -47,24 +108,35 @@ export default function Home() {
       <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
         <AnimatedBoxes />
         <div className="container relative z-10 px-4 mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4">
+          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="text-center">
+            <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
                 Hey{" "}
               </span>
-              <span className="inline-block">👋</span>
+              <motion.span
+                className="inline-block"
+                initial={{ rotate: 0 }}
+                animate={{
+                  rotate: [0, 15, -5, 15, 0],
+                  transition: {
+                    duration: 1.2,
+                    ease: "easeInOut",
+                    times: [0, 0.2, 0.4, 0.6, 1],
+                    repeat: 0,
+                  },
+                }}
+              >
+                👋
+              </motion.span>
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
                 {" "}
                 It's Henry Barton
               </span>
-            </h1>
-            <h2 className="text-xl md:text-2xl mb-8 text-gray-300">🚀 Designer | Futurist | Innovator</h2>
-            <div className="flex flex-wrap justify-center gap-4">
+            </motion.h1>
+            <motion.h2 variants={itemVariants} className="text-xl md:text-2xl mb-8 text-gray-300">
+              🚀 Designer | Futurist | Innovator
+            </motion.h2>
+            <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4">
               <ScrollLink to="work" smooth={true} duration={500}>
                 <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white">
                   View Projects
@@ -78,7 +150,7 @@ export default function Home() {
                   Contact Me
                 </Button>
               </ScrollLink>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -147,26 +219,33 @@ export default function Home() {
               <span className="ml-2 text-white">🏗️</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-             <ProjectCard
-  title="ClearSave – Fintech Savings App"
-  description="Mobile-first app for goal-based saving with secure bank linking and real-time progress tracking."
-  tags={["iOS", "Fintech", "UX/UI", "Design Strategy"]}
-  href="/projects/clearsave"
-/>
+              <ProjectCard
+                title="ClearSave – Fintech Savings App"
+                description="Mobile-first app for goal-based saving with secure bank linking and real-time progress tracking."
+                tags={["iOS", "Fintech", "UX/UI", "Design Strategy"]}
+                slug="clearsave"
+                imageSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Clear%20Save%20Port-MdbW3GeipJZfMkVaT0g5tN7ndDXvCD.png"
+              />
               <ProjectCard
                 title="Lunara – AI Mental Wellness App"
                 description="Mindfulness app powered by AI personalization, featuring mood tracking and guided exercises."
                 tags={["AI", "Mental Health", "Personalization", "Mobile Design"]}
+                slug="lunara"
+                imageSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Lunara%20Poster-ExKsLHRTup5hgVRlyvIDWUvtTdgzxL.png"
               />
               <ProjectCard
                 title="xResumatrix – AI Resume Builder"
                 description="Responsive AI-powered web app that guides users through creating custom resumes with smart tone control."
                 tags={["AI", "Web App", "Responsive Design", "UX Writing"]}
+                slug="resumatrix"
+                imageSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Resumatrix%20Poster.png-EgEH9zNLQezoup3a0KQDlHnmtV1yny.jpeg"
               />
               <ProjectCard
-                title="Pitch Decks for Zero AI & The Vine"
-                description="Investor-focused decks that helped secure $3M+ in funding and communicate big visions through clean storytelling."
-                tags={["Visual Storytelling", "Branding", "Investor Materials", "Strategic Design"]}
+                title="Zero AI – Seed Pitch Deck"
+                description="A high-impact pitch deck that helped secure $3M+ in funding by clearly communicating product vision, design value, and strategic positioning."
+                tags={["Pitch Deck", "Strategic Design", "Visual Storytelling", "Product Thinking"]}
+                slug="zero-ai"
+                imageSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Slide.%201-Mwu9mm3KkhrokuyMw9TFpgoZJG66tr.png"
               />
             </div>
           </motion.div>
@@ -189,70 +268,28 @@ export default function Home() {
               <span className="ml-2 text-white">🚀</span>
             </h2>
             <div className="max-w-3xl mx-auto">
-              <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-400">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      className="mt-1 block w-full rounded-md bg-gray-800 border-gray-700 text-white px-4 py-3"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-400">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      className="mt-1 block w-full rounded-md bg-gray-800 border-gray-700 text-white px-4 py-3"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-400">
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={4}
-                      className="mt-1 block w-full rounded-md bg-gray-800 border-gray-700 text-white px-4 py-3"
-                    ></textarea>
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+              <ContactForm />
+              <div className="mt-6 text-center">
+                <p className="text-gray-400 mb-2">Prefer to schedule a meeting?</p>
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                  <a
+                    href="https://calendly.com/henrybarton/30min"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700"
                   >
-                    Send Message
-                  </Button>
-                </form>
-                <div className="mt-6 text-center">
-                  <p className="text-gray-400 mb-2">Prefer to schedule a meeting?</p>
-                  <div className="flex flex-col sm:flex-row justify-center gap-4">
-                    <a
-                      href="https://calendly.com/henrybarton/30min"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700"
-                    >
-                      <Calendar className="mr-2 h-4 w-4" />
-                      Schedule a Meeting
-                    </a>
-                    <a
-                      href="https://drive.google.com/file/d/142fB6_KzLMlifMXsfZ7dTy8wu2LMP-av/view"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-pink-600 hover:bg-pink-700"
-                    >
-                      <FileText className="mr-2 h-4 w-4" />
-                      View CV
-                    </a>
-                  </div>
+                    <Calendar className="mr-2 h-4 w-4" />
+                    Schedule a Meeting
+                  </a>
+                  <a
+                    href="https://drive.google.com/file/d/1Kfk-LW3fZfIuxrUyhyXSR4eKhkbsJ_1n/view?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-pink-600 hover:bg-pink-700"
+                  >
+                    <FileText className="mr-2 h-4 w-4" />
+                    View CV
+                  </a>
                 </div>
               </div>
             </div>
@@ -277,30 +314,37 @@ export default function Home() {
 }
 
 function ServiceCard({ icon, title, description }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: false, margin: "-100px" })
+
+  const iconVariants = {
+    hidden: { scale: 0.8, opacity: 0, rotateY: 90 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      rotateY: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  }
+
   return (
-    <div className="p-6 rounded-lg bg-gray-900 border border-gray-800 hover:border-purple-500 transition-all duration-300 text-center md:text-left">
-      <div className="mb-4 flex justify-center md:justify-start">{icon}</div>
+    <div
+      ref={ref}
+      className="p-6 rounded-lg bg-gray-900 border border-gray-800 hover:border-purple-500 transition-all duration-300 text-center md:text-left"
+    >
+      <motion.div
+        className="mb-4 flex justify-center md:justify-start"
+        variants={iconVariants}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+      >
+        {icon}
+      </motion.div>
       <h3 className="text-xl font-bold mb-3 text-white">{title}</h3>
       <p className="text-gray-400">{description}</p>
-    </div>
-  )
-}
-
-function ProjectCard({ title, description, tags, image }) {
-  return (
-    <div className="p-6 rounded-lg bg-gray-900 border border-gray-800 hover:border-purple-500 transition-all duration-300">
-      <h3 className="text-xl font-bold mb-3 text-white text-center md:text-left">{title}</h3>
-      <p className="text-gray-400 mb-4 text-center md:text-left">{description}</p>
-      <div className="flex flex-wrap justify-center md:justify-start gap-2">
-        {tags.map((tag, index) => (
-          <span
-            key={index}
-            className="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
     </div>
   )
 }
@@ -308,10 +352,14 @@ function ProjectCard({ title, description, tags, image }) {
 function ContactEmail() {
   return (
     <div className="mt-2">
-      <a href="mailto:bartonhenry15@gmail.com" className="text-purple-400 hover:text-purple-300">
+      <a
+        href="https://mail.google.com/mail/?view=cm&fs=1&to=bartonhenry15@gmail.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-purple-400 hover:text-purple-300"
+      >
         bartonhenry15@gmail.com
       </a>
     </div>
   )
 }
-

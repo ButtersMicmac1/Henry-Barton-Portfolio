@@ -62,4 +62,3 @@ const AnimatedBoxes = () => {
 }
 
 export default AnimatedBoxes
-

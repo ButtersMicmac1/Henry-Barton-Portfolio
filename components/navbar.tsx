@@ -4,12 +4,16 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Linkedin, Calendar, FileText } from "lucide-react"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
+  const isHomePage = pathname === "/"
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,19 +29,37 @@ export default function Navbar() {
   }, [])
 
   const navLinks = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Services", href: "#services" },
-    { name: "Work", href: "#work" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "#home", id: "home" },
+    { name: "About", href: "#about", id: "about" },
+    { name: "Services", href: "#services", id: "services" },
+    { name: "Projects", href: "#work", id: "work" },
+    { name: "Contact", href: "#contact", id: "contact" },
   ]
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId)
+    if (section) {
+      // Close menu first
+      setIsOpen(false)
+
+      // Then scroll to section
+      setTimeout(() => {
+        section.scrollIntoView({ behavior: "smooth" })
+      }, 100)
+    }
+  }
+
+  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, link: { href: string; id: string }) => {
     e.preventDefault()
-    const targetId = href.replace("#", "")
-    const elem = document.getElementById(targetId)
-    elem?.scrollIntoView({ behavior: "smooth" })
-    setIsOpen(false)
+
+    if (isHomePage) {
+      // If on homepage, scroll to section
+      scrollToSection(link.id)
+    } else {
+      // If not on homepage, navigate to homepage with hash
+      setIsOpen(false)
+      router.push(`/${link.href}`)
+    }
   }
 
   const iconVariants = {
@@ -55,7 +77,11 @@ export default function Navbar() {
       }`}
     >
       <div className="container mx-auto px-4 md:px-8 flex justify-between items-center">
-        <Link href="#home" className="text-2xl font-bold text-white" onClick={(e) => scrollToSection(e, "#home")}>
+        <Link
+          href={isHomePage ? "#home" : "/#home"}
+          className="text-2xl font-bold text-white"
+          onClick={(e) => isHomePage && handleNavigation(e, { href: "#home", id: "home" })}
+        >
           <span className="bg-gradient-to-r from-purple-500 to-pink-500 px-2 py-1 rounded-md">HB</span>
         </Link>
 
@@ -66,7 +92,7 @@ export default function Navbar() {
               key={link.name}
               href={link.href}
               className="text-gray-300 hover:text-white transition-colors duration-300 relative group"
-              onClick={(e) => scrollToSection(e, link.href)}
+              onClick={(e) => handleNavigation(e, link)}
             >
               {link.name}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full"></span>
@@ -85,7 +111,7 @@ export default function Navbar() {
             <Calendar size={24} />
           </motion.a>
           <motion.a
-            href="https://drive.google.com/file/d/142fB6_KzLMlifMXsfZ7dTy8wu2LMP-av/view"
+            href="https://drive.google.com/file/d/1Kfk-LW3fZfIuxrUyhyXSR4eKhkbsJ_1n/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-300 hover:text-white transition-colors duration-300"
@@ -125,7 +151,7 @@ export default function Navbar() {
             <Calendar size={24} />
           </motion.a>
           <motion.a
-            href="https://drive.google.com/file/d/142fB6_KzLMlifMXsfZ7dTy8wu2LMP-av/view"
+            href="https://drive.google.com/file/d/1Kfk-LW3fZfIuxrUyhyXSR4eKhkbsJ_1n/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-300 hover:text-white transition-colors duration-300"
@@ -148,7 +174,11 @@ export default function Navbar() {
           >
             <Linkedin size={24} />
           </motion.a>
-          <button className="text-white focus:outline-none" onClick={() => setIsOpen(!isOpen)}>
+          <button
+            className="text-white focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+          >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -180,13 +210,19 @@ export default function Navbar() {
                   transition={{ delay: index * 0.1 }}
                   className="text-center mb-4"
                 >
-                  <Link
-                    href={link.href}
-                    className="text-gray-300 hover:text-white py-2 transition-colors duration-300 text-lg"
-                    onClick={(e) => scrollToSection(e, link.href)}
+                  <button
+                    className="text-gray-300 hover:text-white py-2 transition-colors duration-300 text-lg w-full"
+                    onClick={() => {
+                      if (isHomePage) {
+                        scrollToSection(link.id)
+                      } else {
+                        setIsOpen(false)
+                        router.push(`/${link.href}`)
+                      }
+                    }}
                   >
                     {link.name}
-                  </Link>
+                  </button>
                 </motion.div>
               ))}
             </motion.div>
@@ -196,4 +232,3 @@ export default function Navbar() {
     </motion.nav>
   )
 }
-

@@ -23,4 +23,3 @@ export default function SocialIcon({ icon, href, label, className = "", onClick 
     </Link>
   )
 }
-
