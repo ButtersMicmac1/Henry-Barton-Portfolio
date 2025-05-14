@@ -220,6 +220,13 @@ export default function Home() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
               <ProjectCard
+                title="GitFitCode – Platform & Client UX/UI Support"
+                description="Delivered responsive websites, design systems, and UX support for client projects across early-stage startups and internal GitFitCode platforms."
+                tags={["Web App", "Responsive Design", "UX/UI", "Design Systems"]}
+                slug="gitfitcode"
+                imageSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/gitfitcode%20image%20-WxKWku2A1gqvnvqK0yOzt45qyiJJz5.png"
+              />
+              <ProjectCard
                 title="ClearSave – Fintech Savings App"
                 description="Mobile-first app for goal-based saving with secure bank linking and real-time progress tracking."
                 tags={["iOS", "Fintech", "UX/UI", "Design Strategy"]}
@@ -282,7 +289,7 @@ export default function Home() {
                     Schedule a Meeting
                   </a>
                   <a
-                    href="https://drive.google.com/file/d/1Kfk-LW3fZfIuxrUyhyXSR4eKhkbsJ_1n/view?usp=sharing"
+                    href="https://drive.google.com/file/d/1ATUQi6ytCrbMiFlwA9xWYl-aacw1Qgpf/view?usp=sharing"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-pink-600 hover:bg-pink-700"

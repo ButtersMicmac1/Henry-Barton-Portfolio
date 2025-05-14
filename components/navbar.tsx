@@ -111,7 +111,7 @@ export default function Navbar() {
             <Calendar size={24} />
           </motion.a>
           <motion.a
-            href="https://drive.google.com/file/d/1Kfk-LW3fZfIuxrUyhyXSR4eKhkbsJ_1n/view?usp=sharing"
+            href="https://drive.google.com/file/d/1ATUQi6ytCrbMiFlwA9xWYl-aacw1Qgpf/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-300 hover:text-white transition-colors duration-300"
@@ -151,7 +151,7 @@ export default function Navbar() {
             <Calendar size={24} />
           </motion.a>
           <motion.a
-            href="https://drive.google.com/file/d/1Kfk-LW3fZfIuxrUyhyXSR4eKhkbsJ_1n/view?usp=sharing"
+            href="https://drive.google.com/file/d/1ATUQi6ytCrbMiFlwA9xWYl-aacw1Qgpf/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-300 hover:text-white transition-colors duration-300"

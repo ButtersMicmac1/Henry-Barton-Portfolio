@@ -9,9 +9,9 @@ const timelineData = [
     id: 1,
     company: "GitFitCode",
     role: "UX/UI Designer",
-    period: "2023 - Present",
+    period: "March 2022 - Present",
     location: "Los Angeles, CA",
-    type: "Part Time",
+    type: "Full-Time",
     logo: "/images/gitfitcode-logo.png",
     skills: ["Cross-Functional Collaboration", "End-to-End UX/UI", "Strategic Design"],
   },
@@ -93,24 +93,17 @@ export default function AboutMe() {
                 {/* Desktop description */}
                 <div className="hidden md:block">
                   <p className="text-xl mb-4">
-                    🚀 <strong>Hey, I'm Henry Barton</strong>
-                  </p>
-                  <p className="mb-4">A few years ago, I never imagined I'd end up in design.</p>
-                  <p className="mb-4">
-                    I started out studying business, thinking that was the path. But it didn't take long to realize it
-                    wasn't the right fit. My passion for design came unexpectedly—through my brother, a VP of Design at
-                    a crypto company. Watching how he approached problems opened my eyes to a new way of thinking that
-                    immediately clicked.
+                    🚀 <strong>Hey, I'm Henry Barton.</strong>
                   </p>
                   <p className="mb-4">
-                    Since then, I've built my own perspective—design driven by purpose and strategy, not just
-                    aesthetics. I've come to see that great design isn't just about how things look, but how they work.
-                    It's not just about screens—it's about guiding people through journeys.
+                    I started in business, but found my real path through design. Watching my brother, a VP of Design,
+                    solve problems showed me how powerful simple, human-centered thinking can be.
                   </p>
-                  <p>
-                    That mindset shapes everything I do. Now, I'm fully immersed in design, constantly learning, and
-                    genuinely excited about where this journey is headed.
+                  <p className="mb-4">
+                    Since then, I've focused on product design that guides people where they want to go without
+                    friction. From early research to final UI builds, I design clean, thoughtful experiences that work.
                   </p>
+                  <p>Today, I'm building real products, collaborating across teams, and always learning.</p>
                 </div>
               </div>
             </div>
