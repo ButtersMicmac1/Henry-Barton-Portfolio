@@ -224,7 +224,7 @@ export default function Home() {
                 description="Delivered responsive websites, design systems, and UX support for client projects across early-stage startups and internal GitFitCode platforms."
                 tags={["Web App", "Responsive Design", "UX/UI", "Design Systems"]}
                 slug="gitfitcode"
-                imageSrc="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/gitfitcode%20image%20-WxKWku2A1gqvnvqK0yOzt45qyiJJz5.png"
+                imageSrc="/images/gitfitcode-homepage.png"
               />
               <ProjectCard
                 title="ClearSave – Fintech Savings App"

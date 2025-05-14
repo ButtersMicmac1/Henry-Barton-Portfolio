@@ -46,19 +46,14 @@ export default function GitFitCodePage() {
           <ExternalLink className="w-3 h-3 ml-2" />
         </a>
 
-        {/* Hero image placeholder */}
-        <div className="relative w-full h-[450px] md:h-[600px] mb-12 rounded-xl overflow-hidden shadow-lg bg-gray-800 flex items-center justify-center">
-          <div className="text-center p-8">
-            <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/gitfitcode%20image%20-WxKWku2A1gqvnvqK0yOzt45qyiJJz5.png"
-              alt="GitFitCode Logo"
-              width={300}
-              height={150}
-              className="mx-auto mb-8"
-            />
-            <h3 className="text-2xl font-bold text-indigo-300 mb-4">🚧 Currently Working On Final Visuals</h3>
-            <p className="text-gray-300 max-w-lg mx-auto">(Full project visuals and prototypes coming soon.)</p>
-          </div>
+        {/* Hero image - Improved to match other project pages */}
+        <div className="relative w-full h-[450px] md:h-[600px] mb-12 rounded-xl overflow-hidden shadow-lg">
+          <Image
+            src="/images/gitfitcode-homepage.png"
+            alt="GitFitCode Homepage - Designed for Growth. Engineered to Scale."
+            fill
+            className="object-contain"
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
