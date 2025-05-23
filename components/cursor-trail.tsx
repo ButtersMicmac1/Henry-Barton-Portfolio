@@ -12,15 +12,20 @@ export default function CursorTrail() {
 
   // Check if device is mobile
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768)
-    }
+    try {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth <= 768)
+      }
 
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
+      checkMobile()
+      window.addEventListener("resize", checkMobile)
 
-    return () => {
-      window.removeEventListener("resize", checkMobile)
+      return () => {
+        window.removeEventListener("resize", checkMobile)
+      }
+    } catch (error) {
+      console.error("Error in CursorTrail mobile check:", error)
+      setIsMobile(true) // Default to mobile to avoid issues
     }
   }, [])
 
@@ -28,51 +33,63 @@ export default function CursorTrail() {
   useEffect(() => {
     if (isMobile) return
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mousePositionRef.current = { x: e.clientX, y: e.clientY }
-    }
+    try {
+      const handleMouseMove = (e: MouseEvent) => {
+        mousePositionRef.current = { x: e.clientX, y: e.clientY }
+      }
 
-    window.addEventListener("mousemove", handleMouseMove)
+      window.addEventListener("mousemove", handleMouseMove)
 
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove)
+      return () => {
+        window.removeEventListener("mousemove", handleMouseMove)
+      }
+    } catch (error) {
+      console.error("Error in CursorTrail mouse movement:", error)
     }
   }, [isMobile])
 
   // Animation loop using requestAnimationFrame
   const animate = (time: number) => {
-    if (previousTimeRef.current === null) {
-      previousTimeRef.current = time
+    try {
+      if (previousTimeRef.current === null) {
+        previousTimeRef.current = time
+      }
+
+      const deltaTime = time - (previousTimeRef.current || 0)
+
+      // Only update trail every 16ms (approximately 60fps)
+      if (deltaTime > 16) {
+        previousTimeRef.current = time
+
+        const { x, y } = mousePositionRef.current
+
+        setTrail((prevTrail) => {
+          const newPoint = { x, y, id: Date.now() }
+          const newTrail = [newPoint, ...prevTrail]
+          return newTrail.slice(0, 12) // Keep only 12 points in the trail
+        })
+      }
+
+      requestRef.current = requestAnimationFrame(animate)
+    } catch (error) {
+      console.error("Error in CursorTrail animation:", error)
     }
-
-    const deltaTime = time - (previousTimeRef.current || 0)
-
-    // Only update trail every 16ms (approximately 60fps)
-    if (deltaTime > 16) {
-      previousTimeRef.current = time
-
-      const { x, y } = mousePositionRef.current
-
-      setTrail((prevTrail) => {
-        const newPoint = { x, y, id: Date.now() }
-        const newTrail = [newPoint, ...prevTrail]
-        return newTrail.slice(0, 12) // Keep only 12 points in the trail
-      })
-    }
-
-    requestRef.current = requestAnimationFrame(animate)
   }
 
   // Start and stop the animation loop
   useEffect(() => {
-    if (!isMobile) {
-      requestRef.current = requestAnimationFrame(animate)
-    }
-
-    return () => {
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current)
+    try {
+      if (!isMobile) {
+        requestRef.current = requestAnimationFrame(animate)
       }
+
+      return () => {
+        if (requestRef.current) {
+          cancelAnimationFrame(requestRef.current)
+        }
+      }
+    } catch (error) {
+      console.error("Error in CursorTrail animation setup:", error)
     }
   }, [isMobile])
 

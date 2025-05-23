@@ -19,24 +19,31 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        <div id="app-root">
+          {/* Error boundary would be ideal here, but we'll keep it simple */}
+          {children}
+        </div>
         <CursorTrail />
-        {children}
         <Script id="handle-hash-navigation" strategy="afterInteractive">
           {`
-            function handleHashNavigation() {
-              const hash = window.location.hash;
-              if (hash) {
-                setTimeout(() => {
-                  const element = document.getElementById(hash.substring(1));
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }, 500);
+            try {
+              function handleHashNavigation() {
+                const hash = window.location.hash;
+                if (hash) {
+                  setTimeout(() => {
+                    const element = document.getElementById(hash.substring(1));
+                    if (element) {
+                      element.scrollInView({ behavior: 'smooth' });
+                    }
+                  }, 500);
+                }
               }
+              
+              window.addEventListener('load', handleHashNavigation);
+              window.addEventListener('hashchange', handleHashNavigation);
+            } catch (e) {
+              console.error("Error in hash navigation script:", e);
             }
-            
-            window.addEventListener('load', handleHashNavigation);
-            window.addEventListener('hashchange', handleHashNavigation);
           `}
         </Script>
       </body>

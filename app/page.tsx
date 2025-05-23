@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useEffect, useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { Linkedin, Calendar, FileText, Smartphone, Palette, Lightbulb, Users, Instagram } from "lucide-react"
@@ -22,82 +20,32 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setMounted(true)
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 2000) // Show loading for 2 seconds
+    try {
+      setMounted(true)
+      const timer = setTimeout(() => {
+        setLoading(false)
+      }, 2000) // Show loading for 2 seconds
 
-    return () => clearTimeout(timer)
+      return () => clearTimeout(timer)
+    } catch (error) {
+      console.error("Error in Home component useEffect:", error)
+      setLoading(false)
+    }
   }, [])
 
   // Handle hash navigation when the component mounts
   useEffect(() => {
-    if (!loading) {
-      scrollToHash()
+    try {
+      if (!loading) {
+        scrollToHash()
+      }
+    } catch (error) {
+      console.error("Error in scrollToHash:", error)
     }
   }, [loading])
 
   if (!mounted) return null
   if (loading) return <Loading />
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    const formData = new FormData(e.currentTarget)
-    const name = (formData.get("name") as string) || "Visitor"
-    const email = (formData.get("email") as string) || ""
-    const message = (formData.get("message") as string) || ""
-
-    // Encode the message properly for mailto
-    const encodedSubject = encodeURIComponent(`Portfolio Contact from ${name}`)
-    const encodedBody = encodeURIComponent(`${message}\n\nFrom: ${name}\nEmail: ${email}`)
-
-    // Create mailto link with form data
-    const mailtoLink = `mailto:bartonhenry15@gmail.com?subject=${encodedSubject}&body=${encodedBody}`
-
-    // Try to open the email client
-    try {
-      window.location.href = mailtoLink
-
-      // Clear the form after submission
-      e.currentTarget.reset()
-
-      // Show a success message
-      alert(
-        "Opening your email client. If nothing happens, please copy the message and email it directly to bartonhenry15@gmail.com",
-      )
-    } catch (error) {
-      // Fallback if the mailto link is blocked
-      alert(
-        "Unable to open your email client automatically. Please send an email directly to bartonhenry15@gmail.com with your message.",
-      )
-    }
-  }
-
-  // Animation variants for hero section
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 10,
-      },
-    },
-  }
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
@@ -108,8 +56,36 @@ export default function Home() {
       <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
         <AnimatedBoxes />
         <div className="container relative z-10 px-4 mx-auto">
-          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="text-center">
-            <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4">
+          <motion.div
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.2,
+                  delayChildren: 0.3,
+                },
+              },
+            }}
+            initial="hidden"
+            animate="visible"
+            className="text-center"
+          >
+            <motion.h1
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                visible: {
+                  y: 0,
+                  opacity: 1,
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 10,
+                  },
+                },
+              }}
+              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
+            >
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
                 Hey{" "}
               </span>
@@ -133,10 +109,38 @@ export default function Home() {
                 It's Henry Barton
               </span>
             </motion.h1>
-            <motion.h2 variants={itemVariants} className="text-xl md:text-2xl mb-8 text-gray-300">
+            <motion.h2
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                visible: {
+                  y: 0,
+                  opacity: 1,
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 10,
+                  },
+                },
+              }}
+              className="text-xl md:text-2xl mb-8 text-gray-300"
+            >
               🚀 Designer | Futurist | Innovator
             </motion.h2>
-            <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4">
+            <motion.div
+              variants={{
+                hidden: { y: 20, opacity: 0 },
+                visible: {
+                  y: 0,
+                  opacity: 1,
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 10,
+                  },
+                },
+              }}
+              className="flex flex-wrap justify-center gap-4"
+            >
               <ScrollLink to="work" smooth={true} duration={500}>
                 <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white">
                   View Projects

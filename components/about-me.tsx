@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { Calendar, MapPin, Building2 } from "lucide-react"
@@ -56,6 +57,16 @@ const skillsData = {
 }
 
 export default function AboutMe() {
+  const [profileImageError, setProfileImageError] = useState(false)
+  const [logoErrors, setLogoErrors] = useState<Record<string, boolean>>({})
+
+  const handleLogoError = (companyId: number) => {
+    setLogoErrors((prev) => ({
+      ...prev,
+      [companyId]: true,
+    }))
+  }
+
   return (
     <section id="about" className="py-12 bg-gradient-to-b from-black to-gray-900">
       <div className="container px-4 mx-auto">
@@ -74,13 +85,20 @@ export default function AboutMe() {
           {/* Profile Section */}
           <div className="flex flex-col md:flex-row-reverse items-center gap-8 mb-16">
             <div className="md:w-1/3">
-              <div className="relative w-64 h-64 mx-auto">
-                <Image
-                  src="/images/henry-portrait.png"
-                  alt="Henry Barton"
-                  fill
-                  className="rounded-lg object-cover shadow-lg"
-                />
+              <div className="relative w-64 h-64 mx-auto bg-gray-800 rounded-lg">
+                {!profileImageError ? (
+                  <Image
+                    src="/images/henry-portrait.png"
+                    alt="Henry Barton"
+                    fill
+                    className="rounded-lg object-cover shadow-lg"
+                    onError={() => setProfileImageError(true)}
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <p className="text-gray-400">Henry Barton</p>
+                  </div>
+                )}
               </div>
             </div>
             <div className="md:w-2/3">
@@ -136,13 +154,18 @@ export default function AboutMe() {
                     <div className="md:w-1/2 p-6 bg-gray-900/50 rounded-xl backdrop-blur-sm border border-gray-800">
                       <div className="flex flex-col md:flex-row items-center gap-4">
                         <div className="w-16 h-16 md:w-12 md:h-12 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden mb-4 md:mb-0 mx-auto md:mx-0">
-                          <Image
-                            src={item.logo || "/placeholder.svg"}
-                            alt={item.company}
-                            width={56}
-                            height={56}
-                            className="rounded-full object-contain"
-                          />
+                          {!logoErrors[item.id] ? (
+                            <Image
+                              src={item.logo || "/placeholder.svg"}
+                              alt={item.company}
+                              width={56}
+                              height={56}
+                              className="rounded-full object-contain"
+                              onError={() => handleLogoError(item.id)}
+                            />
+                          ) : (
+                            <span className="text-gray-400 text-xs">{item.company.charAt(0)}</span>
+                          )}
                         </div>
                         <div className="text-center md:text-left">
                           <h3 className="text-xl font-bold text-white">{item.role}</h3>

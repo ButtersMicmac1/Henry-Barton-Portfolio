@@ -1,10 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { Globe, Laptop, Code, Layers, Monitor, ExternalLink } from "lucide-react"
 
 export default function GitFitCodePage() {
+  const [imageError, setImageError] = useState(false)
+
   return (
     <div className="max-w-4xl mx-auto">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>
@@ -46,14 +49,24 @@ export default function GitFitCodePage() {
           <ExternalLink className="w-3 h-3 ml-2" />
         </a>
 
-        {/* Hero image - Improved to match other project pages */}
-        <div className="relative w-full h-[450px] md:h-[600px] mb-12 rounded-xl overflow-hidden shadow-lg">
-          <Image
-            src="/images/gitfitcode-homepage.png"
-            alt="GitFitCode Homepage - Designed for Growth. Engineered to Scale."
-            fill
-            className="object-contain"
-          />
+        {/* Hero image with error handling */}
+        <div className="relative w-full h-[450px] md:h-[600px] mb-12 rounded-xl overflow-hidden shadow-lg bg-gray-800">
+          {!imageError ? (
+            <Image
+              src="/images/gitfitcode-homepage.png"
+              alt="GitFitCode Homepage - Designed for Growth. Engineered to Scale."
+              fill
+              className="object-contain"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center p-8">
+                <h3 className="text-xl font-bold text-indigo-300 mb-4">GitFitCode Homepage</h3>
+                <p className="text-gray-300">Image could not be loaded</p>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">

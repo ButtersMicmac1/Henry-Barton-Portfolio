@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
@@ -13,6 +14,8 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ title, description, tags, slug, imageSrc }: ProjectCardProps) {
+  const [imageError, setImageError] = useState(false)
+
   return (
     <Link href={`/projects/${slug}`}>
       <motion.div
@@ -20,8 +23,20 @@ export default function ProjectCard({ title, description, tags, slug, imageSrc }
         whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(139, 92, 246, 0.3)" }}
       >
         {imageSrc && (
-          <div className="relative w-full h-40 mb-4 rounded-md overflow-hidden">
-            <Image src={imageSrc || "/placeholder.svg"} alt={title} fill className="object-cover" />
+          <div className="relative w-full h-40 mb-4 rounded-md overflow-hidden bg-gray-800">
+            {!imageError ? (
+              <Image
+                src={imageSrc || "/placeholder.svg"}
+                alt={title}
+                fill
+                className="object-cover"
+                onError={() => setImageError(true)}
+              />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <p className="text-gray-400 text-sm">{title}</p>
+              </div>
+            )}
           </div>
         )}
         <h3 className="text-xl font-bold mb-3 text-white text-center md:text-left">{title}</h3>
