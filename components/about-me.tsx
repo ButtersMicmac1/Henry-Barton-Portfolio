@@ -88,7 +88,7 @@ export default function AboutMe() {
               <div className="relative w-64 h-64 mx-auto bg-gray-800 rounded-lg">
                 {!profileImageError ? (
                   <Image
-                    src="/images/henry-portrait.png"
+                    src="/images/henry-profile-new.jpg"
                     alt="Henry Barton"
                     fill
                     className="rounded-lg object-cover shadow-lg"

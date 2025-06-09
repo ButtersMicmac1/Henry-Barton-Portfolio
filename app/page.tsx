@@ -12,6 +12,7 @@ import Loading from "@/components/loading"
 import InteractiveShapes from "@/components/InteractiveShapes"
 import AnimatedBoxes from "@/components/AnimatedBoxes"
 import ProjectCard from "@/components/project-card"
+import GitFitCodeCard from "@/components/gitfitcode-card"
 import { scrollToHash } from "@/lib/scroll-to-hash"
 import ContactForm from "@/components/contact-form"
 
@@ -223,13 +224,7 @@ export default function Home() {
               <span className="ml-2 text-white">🏗️</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-              <ProjectCard
-                title="GitFitCode – Platform & Client UX/UI Support"
-                description="Delivered responsive websites, design systems, and UX support for client projects across early-stage startups and internal GitFitCode platforms."
-                tags={["Web App", "Responsive Design", "UX/UI", "Design Systems"]}
-                slug="gitfitcode"
-                imageSrc="/images/gitfitcode-homepage.png"
-              />
+              <GitFitCodeCard />
               <ProjectCard
                 title="ClearSave – Fintech Savings App"
                 description="Mobile-first app for goal-based saving with secure bank linking and real-time progress tracking."
