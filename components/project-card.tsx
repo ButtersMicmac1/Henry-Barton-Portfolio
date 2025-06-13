@@ -1,9 +1,12 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
+import { ExternalLink } from "lucide-react"
 
 interface ProjectCardProps {
   title: string
@@ -11,10 +14,19 @@ interface ProjectCardProps {
   tags: string[]
   slug: string
   imageSrc?: string
+  liveUrl?: string
 }
 
-export default function ProjectCard({ title, description, tags, slug, imageSrc }: ProjectCardProps) {
+export default function ProjectCard({ title, description, tags, slug, imageSrc, liveUrl }: ProjectCardProps) {
   const [imageError, setImageError] = useState(false)
+
+  const handleLiveUrlClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (liveUrl) {
+      window.open(liveUrl, "_blank", "noopener noreferrer")
+    }
+  }
 
   return (
     <Link href={`/projects/${slug}`}>
@@ -41,7 +53,7 @@ export default function ProjectCard({ title, description, tags, slug, imageSrc }
         )}
         <h3 className="text-xl font-bold mb-3 text-white text-center md:text-left">{title}</h3>
         <p className="text-gray-400 mb-4 text-center md:text-left">{description}</p>
-        <div className="flex flex-wrap justify-center md:justify-start gap-2">
+        <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-4">
           {tags.map((tag, index) => (
             <span
               key={index}
@@ -51,6 +63,17 @@ export default function ProjectCard({ title, description, tags, slug, imageSrc }
             </span>
           ))}
         </div>
+        {liveUrl && (
+          <div className="flex justify-center md:justify-start">
+            <button
+              onClick={handleLiveUrlClick}
+              className="inline-flex items-center px-4 py-2 rounded-md bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-md text-sm font-medium"
+            >
+              Visit Live Site
+              <ExternalLink className="w-4 h-4 ml-2" />
+            </button>
+          </div>
+        )}
       </motion.div>
     </Link>
   )

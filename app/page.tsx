@@ -224,6 +224,14 @@ export default function Home() {
               <span className="ml-2 text-white">🏗️</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+              <ProjectCard
+                title="Threadline — Async Team Dashboard"
+                description="A modern async dashboard designed for remote teams to share updates, celebrate wins, and stay in sync—without the Slack noise or robotic standup bots."
+                tags={["Web App", "UX/UI", "Design Systems", "Remote Work", "Dashboard"]}
+                slug="threadline"
+                imageSrc="/images/threadline-cover.png"
+                liveUrl="https://threadline-sync.vercel.app/"
+              />
               <GitFitCodeCard />
               <ProjectCard
                 title="ClearSave – Fintech Savings App"
